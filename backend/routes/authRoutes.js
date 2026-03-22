@@ -26,6 +26,7 @@ router.get("/google/callback",
             httpOnly: true,
             secure: false,
         })
+        
         res.redirect(process.env.CLIENT_URL)
     }
 )

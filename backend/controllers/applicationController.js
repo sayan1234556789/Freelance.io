@@ -1,4 +1,3 @@
-import { application } from "express";
 import Application from "../models/Application.js";
 
 export const applyToProject = async (req, res) => {
@@ -45,7 +44,7 @@ export const getMyApplications = async (req, res) => {
     try {
         const myApplications = await Application.find({
             freelancerId: req.user
-        }).populate("projectId", "title budget deadline")
+        }).populate("projectId", "title budget deadline description")
 
         res.json(myApplications)
     } catch (error) {

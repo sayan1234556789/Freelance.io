@@ -4,54 +4,52 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const CreateProject = () => {
-    const [form, setForm] = useState({
-        title: "",
-        description: "",
-        budget: "",
-        skills: ""
-    })
-    const navigate = useNavigate()
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    budget: "",
+    skills: "",
+    deadline: "",
+  });
+  const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        })
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formattedData = {
+        ...form,
+        skillsRequired: form.skills
+          .split(",")
+          .map((e) => e.trim())
+          .filter((e) => e.length > 0),
+      };
+
+      delete formattedData.skills;
+
+      const res = await api.post("/projects", formattedData);
+
+      alert("Project Created!");
+      console.log(res.data);
+      navigate("/clientdashboard");
+    } catch (error) {
+      console.log(error.response?.data || error);
     }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        try{
-            const formattedData = {
-                ...form,
-                skillsRequired: form.skills
-                    .split(",")
-                    .map((e) => e.trim())
-                    .filter((e) => e.length > 0)
-            }
-
-            delete formattedData.skills
-
-            const res = await api.post("/projects", formattedData)
-
-            alert("Project Created!")
-            console.log(res.data)
-            navigate("/clientdashboard")
-        }
-        catch(error){
-            console.log(error.response?.data || error)
-        }
-    }
+  };
 
   return (
     <div className="bg-white/10 min-h-screen flex flex-col">
       <Navbar />
 
       <div className="flex flex-1 items-center justify-center px-4 py-8">
-
         <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-md border border-[#DBE2EF]">
-
           <div className="mb-6">
             <span className="inline-flex items-center gap-2 text-[#3F72AF] text-xs font-semibold tracking-widest uppercase mb-2">
               <span className="w-4 h-px bg-[#3F72AF]" />
@@ -68,7 +66,6 @@ const CreateProject = () => {
           </div>
 
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-
             <input
               type="text"
               name="title"
@@ -108,6 +105,21 @@ const CreateProject = () => {
               outline-none focus:border-[#3F72AF]"
             />
 
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-[#112D4E]/60">
+                Deadline
+              </label>
+              <input
+                type="date"
+                name="deadline"
+                onChange={handleChange}
+                className="px-4 py-3 rounded-lg border border-[#DBE2EF] bg-[#F9F7F7]
+                text-sm text-[#112D4E] font-medium
+                outline-none focus:border-[#3F72AF]
+                transition-all duration-200"
+              />
+            </div>
+
             <div className="h-px bg-[#DBE2EF] mt-2" />
 
             <button
@@ -117,13 +129,11 @@ const CreateProject = () => {
             >
               Create Project
             </button>
-
           </form>
 
           <p className="text-xs text-center text-[#112D4E]/40 mt-5">
             Your project will be visible to all freelancers on the platform.
           </p>
-
         </div>
       </div>
     </div>

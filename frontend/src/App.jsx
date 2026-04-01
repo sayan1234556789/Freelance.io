@@ -10,6 +10,7 @@ import CreateProject from './pages/CreateProject'
 import Projects from './pages/Projects'
 import AuthRedirect from './routes/AuthRedirect'
 import ClientDashboard from './pages/ClientDashboard'
+import ProjectDetails from './pages/ProjectDetails'
 
 const App = () => {
   return (
@@ -42,6 +43,8 @@ const App = () => {
           <ClientDashboard />
         </ProtectedRoute>
       } />
+
+      <Route path='/projects/:id' element={<ProjectDetails />} />
     </Routes>
   )
 }

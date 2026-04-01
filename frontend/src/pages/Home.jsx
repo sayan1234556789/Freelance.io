@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../context/useAuthContext";
 
 const Home = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="bg-[#F9F7F7] min-h-screen text-[#112D4E] antialiased">
       <Navbar />
@@ -30,11 +34,25 @@ const Home = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-2">
-              <button className="bg-[#112D4E] text-[#F9F7F7] px-7 py-3 rounded-lg font-semibold hover:bg-[#3F72AF] transition">
+              <button
+                onClick={() => {
+                  if (user && user.role === "client") {
+                    navigate("/clientdashboard");
+                  } else {
+                    alert("Login as client to start hiring");
+                    logout()
+                    navigate("/login");
+                  }
+                }}
+                className="bg-[#112D4E] text-[#F9F7F7] px-7 py-3 rounded-lg font-semibold hover:bg-[#3F72AF] transition"
+              >
                 Start Hiring
               </button>
 
-              <button className="border border-[#112D4E]/30 px-7 py-3 rounded-lg hover:bg-[#112D4E] hover:text-white transition">
+              <button
+                onClick={() => navigate("/getallprojects")}
+                className="border border-[#112D4E]/30 px-7 py-3 rounded-lg hover:bg-[#112D4E] hover:text-white transition"
+              >
                 Browse Projects
               </button>
             </div>

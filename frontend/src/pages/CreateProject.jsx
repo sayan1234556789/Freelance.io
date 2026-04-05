@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const CreateProject = () => {
   const [form, setForm] = useState({
@@ -36,11 +37,12 @@ const CreateProject = () => {
 
       const res = await api.post("/projects", formattedData);
 
-      alert("Project Created!");
+      toast.success("Project Created!");
       console.log(res.data);
       navigate("/clientdashboard");
     } catch (error) {
       console.log(error.response?.data || error);
+      toast.error("error in creating project");
     }
   };
 
@@ -112,6 +114,7 @@ const CreateProject = () => {
               <input
                 type="date"
                 name="deadline"
+                value={form.deadline?.split("T")[0]}
                 onChange={handleChange}
                 className="px-4 py-3 rounded-lg border border-[#DBE2EF] bg-[#F9F7F7]
                 text-sm text-[#112D4E] font-medium

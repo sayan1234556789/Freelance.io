@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../api/axios'
+import { toast } from "react-toastify";
+
 
 const VerifyEmail = () => {
     const {token} = useParams()
@@ -12,7 +14,7 @@ const VerifyEmail = () => {
         }
         hasRun.current = true
         if(!token){
-            alert('Invalid Link')
+            toast.error('Invalid Link')
             navigate('/register')
             return
         }
@@ -21,10 +23,11 @@ const VerifyEmail = () => {
             try {
                 const res = await api.get(`/auth/verify/${token}`)
 
-                alert(res.data.message)
+                console.log(res.data.message)
+                toast.success("Verification successful")
                 navigate("/login")
             } catch (error) {
-                alert("verification failed")
+                toast.error("verification failed")
                 console.log(error.response?.data || error.message)
             }
         }

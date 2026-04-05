@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/useAuthContext";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const { user, logout } = useAuth();
@@ -39,7 +40,7 @@ const Home = () => {
                   if (user && user.role === "client") {
                     navigate("/clientdashboard");
                   } else {
-                    alert("Login as client to start hiring");
+                    toast.info("Login as client to start hiring");
                     logout()
                     navigate("/login");
                   }

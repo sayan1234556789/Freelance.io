@@ -78,10 +78,10 @@ const Projects = () => {
                 key === "search"
                   ? "Search..."
                   : key === "skills"
-                    ? "Skills"
-                    : key === "minBudget"
-                      ? "Min Budget"
-                      : "Max Budget"
+                  ? "Skills"
+                  : key === "minBudget"
+                  ? "Min Budget"
+                  : "Max Budget"
               }
               value={filters[key]}
               onChange={(e) =>

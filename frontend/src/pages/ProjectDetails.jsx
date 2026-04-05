@@ -4,6 +4,8 @@ import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -36,10 +38,11 @@ const ProjectDetails = () => {
         projectId: id,
         proposal,
       });
-      alert("Applied successfully");
+      toast.success("Applied successfully");
       setProposal("")
     } catch (err) {
-      alert(err.response?.data?.message);
+      console.log(err.response?.data?.message);
+      toast.error("Apply again")
     }finally{
       navigate("/getallprojects")
     }

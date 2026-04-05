@@ -11,6 +11,8 @@ import Projects from './pages/Projects'
 import AuthRedirect from './routes/AuthRedirect'
 import ClientDashboard from './pages/ClientDashboard'
 import ProjectDetails from './pages/ProjectDetails'
+import ProjectApplications from './pages/ProjectApplications'
+import EditProject from './pages/EditProject'
 
 const App = () => {
   return (
@@ -45,6 +47,16 @@ const App = () => {
       } />
 
       <Route path='/projects/:id' element={<ProjectDetails />} />
+
+      <Route path="/projects/:id/applications" element={<ProjectApplications />} />
+
+      <Route path='/projects/edit/:id' element={
+        <ProtectedRoute role="client" >
+          <EditProject />
+        </ProtectedRoute>
+        } />
+
+
     </Routes>
   )
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/useAuthContext";
+import { toast } from "react-toastify";
 
 const ClientDashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -24,22 +25,22 @@ const ClientDashboard = () => {
     fetchMyProjects();
   }, []);
 
-  const updateStatus = async (id, status) => {
-    try {
-      await api.put(`/applications/${id}`, { status });
+  const handleDelete = async(id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this project?")
 
-      setProjects((prev) =>
-        prev.map((project) => ({
-          ...project,
-          applications: project.applications.map((app) =>
-            app._id === id ? { ...app, status } : app,
-          ),
-        })),
-      );
+    if(!confirmDelete) return
+
+    try {
+      const res = await api.delete(`/projects/${id}`)
+
+      setProjects(projects.filter((e) => e._id !== id))
+
+      toast.success("Deleted Successfully")
     } catch (error) {
-      console.log(error.response?.data || error);
+      console.log(error.response?.data || error)
+      toast.error("Error in deletion")
     }
-  };
+  } 
 
   return (
     <div className="bg-[#F9F7F7] min-h-screen text-[#112D4E]">
@@ -139,85 +140,48 @@ const ClientDashboard = () => {
                 </div>
 
                 <div className="mt-6 pt-5 border-t border-[#DBE2EF]">
-                  <h3 className="text-sm font-semibold mb-4 flex justify-between">
-                    Applicants
-                  </h3>
-
-                  {project.applications?.length === 0 ? (
-                    <p className="text-xs text-center text-[#112D4E]/50">
-                      No applicants yet
+                  <div className="flex justify-between items-center mb-4">
+                    <p className="text-xs text-[#112D4E]/40 uppercase tracking-wide">
+                      Actions
                     </p>
-                  ) : (
-                    <div className="space-y-4">
-                      {project.applications.map((app) => (
-                        <div
-                          key={app._id}
-                          className="bg-[#F9F7F7] border border-[#DBE2EF]
-                          rounded-xl p-4 hover:shadow-sm transition"
-                        >
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-9 h-9 rounded-full bg-[#DBE2EF] flex items-center justify-center font-semibold text-[#3F72AF]">
-                              {app.freelancerId?.name?.charAt(0)}
-                            </div>
 
-                            <div>
-                              <p className="text-sm font-semibold">
-                                {app.freelancerId?.name}
-                              </p>
-                              <p className="text-xs text-[#112D4E]/50">
-                                {app.freelancerId?.email}
-                              </p>
-                            </div>
-                          </div>
+                    <Link to={`/projects/${project._id}/applications`}>
+                      <button
+                        className="inline-flex items-center gap-2
+                        bg-[#3F72AF] text-white text-sm font-semibold
+                        px-4 py-2 rounded-lg
+                        hover:bg-[#112D4E]
+                        active:scale-95
+                        transition-all duration-200
+                        shadow-[0_3px_12px_rgba(63,114,175,0.35)]"
+                      >
+                        View Applications →
+                      </button>
+                    </Link>
+                  </div>
 
-                          <div className="mb-3">
-                            <p className="text-[10px] uppercase text-[#112D4E]/40 mb-1">
-                              Proposal
-                            </p>
-                            <p className="text-sm bg-white border border-[#DBE2EF] p-3 rounded-lg">
-                              {app.proposal}
-                            </p>
-                          </div>
+                  <div className="flex gap-3">
+                    <Link to={`/projects/edit/${project._id}`}>
+                      <button
+                        className="px-4 py-2 text-sm font-medium rounded-lg
+                        border border-[#DBE2EF] text-[#112D4E]
+                        hover:border-[#3F72AF] hover:text-[#3F72AF]
+                        transition-all duration-200"
+                      >
+                        ✏️ Edit
+                      </button>
+                    </Link>
 
-                          <div className="flex justify-end gap-2">
-                            {app.status === "pending" && (
-                              <>
-                                <button
-                                  onClick={() =>
-                                    updateStatus(app._id, "accepted")
-                                  }
-                                  className="text-xs px-3 py-1.5 bg-green-500 text-white rounded-md hover:bg-green-600"
-                                >
-                                  Accept
-                                </button>
-
-                                <button
-                                  onClick={() =>
-                                    updateStatus(app._id, "rejected")
-                                  }
-                                  className="text-xs px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600"
-                                >
-                                  Reject
-                                </button>
-                              </>
-                            )}
-
-                            {app.status === "accepted" && (
-                              <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-600">
-                                ✓ Accepted
-                              </span>
-                            )}
-
-                            {app.status === "rejected" && (
-                              <span className="text-xs px-3 py-1 rounded-full bg-red-100 text-red-500">
-                                ✕ Rejected
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    <button
+                      onClick={() => handleDelete(project._id)}
+                      className="px-4 py-2 text-sm font-medium rounded-lg
+                      border border-red-200 text-red-500
+                      hover:bg-red-50 hover:border-red-400
+                      transition-all duration-200"
+                    >
+                      🗑 Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

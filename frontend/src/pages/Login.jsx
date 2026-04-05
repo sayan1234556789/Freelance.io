@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/useAuthContext"
 import api from "../api/axios"
+import { toast } from "react-toastify";
+
 
 const Login = () => {
 
@@ -28,7 +30,7 @@ const Login = () => {
     const {email, password} = form
 
     if(!email || !password){
-      alert("All fields are required")
+      toast.warning("All fields are required")
       return;
     }
     try {
@@ -38,12 +40,12 @@ const Login = () => {
         login(response.data)
       }
 
-      alert("login successfull")
+      toast.success("login successfull")
 
       navigate("/dashboard")
     } catch (error) {
       console.log(error.response?.data || error)
-      alert("login not successful!")
+      toast.error("login not successful!")
     }
   }
   return (

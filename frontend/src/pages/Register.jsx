@@ -2,6 +2,8 @@ import { useState } from "react"
 import Navbar from "../components/Navbar"
 import { Link, useNavigate } from "react-router-dom"
 import api from "../api/axios"
+import { toast } from "react-toastify";
+
 
 const Register = () => {
   const [form , setForm] = useState({
@@ -25,23 +27,23 @@ const Register = () => {
     e.preventDefault()
 
     if(!form.email || !form.password || !form.name || !form.confirmPassword || !form.role){
-      alert("All fields are required!")
+      toast.warning("All fields are required!")
       return
     }
 
     if(form.password !== form.confirmPassword){
-      alert("passwords donot match")
+      toast.warning("passwords donot match")
       return
     }
     try {
       const response = await api.post("/auth/register", form)
       console.log(response.data)
 
-      alert("Verify your email...")
+      toast.info("Verify your email...")
 
     } catch (error) {
       console.log(error.response?.data || error)
-      alert("Registration failed")
+      toast.error("Registration failed")
     }
   }
 

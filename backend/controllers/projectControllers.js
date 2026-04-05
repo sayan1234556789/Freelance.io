@@ -5,6 +5,10 @@ export const createProject = async (req, res) => {
     try {
         const {title, description, budget, skillsRequired, deadline } = req.body
 
+        if(budget < 0) {
+            throw new Error("Budget must be in positive")
+        }
+
         const project = await Project.create({
             title,
             description,
@@ -150,6 +154,7 @@ export const getMyProjects = async ( req, res ) => {
         const userId = req.user
 
         const projects = await Project.find({clientId: userId})
+            .populate("assignedFreelancer", "name email")
             .sort({ createdAt: -1 })
 
         const projectIds = projects.map((e) => e._id)

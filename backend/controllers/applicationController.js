@@ -1,4 +1,5 @@
 import Application from "../models/Application.js";
+import Project from "../models/Project.js";
 
 export const applyToProject = async (req, res) => {
     try {
@@ -68,7 +69,25 @@ export const updateApplicationStatus = async (req, res) => {
 
         await targetApplication.save()
 
-        res.json(targetApplication)
+        if(req.body.status === "accepted"){
+            const project = await Project.findById(targetApplication.projectId)
+
+            if(!project){
+                return res.status(404).json({
+                    message: "Project not found"
+                })
+            }
+
+            project.assignedFreelancer = targetApplication.freelancerId
+            project.status = "in-progress"
+
+            await project.save()
+        }
+
+        res.status(200).json({
+            success: true,
+            application: targetApplication
+        })
     } catch (error) {
         res.status(400).json({
             message: error.message

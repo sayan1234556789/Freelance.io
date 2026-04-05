@@ -15,7 +15,7 @@ const ProjectApplications = () => {
             try {
                 const res = await api.get("/projects/my-projects")
 
-                const targetProject = res.data.projects.find((p) => p._id === id) 
+                const targetProject = res.data.projects.find((p) => p._id.toString() === id) 
 
                 setProject(targetProject)
                 setApplications(targetProject?.applications || [])
@@ -95,7 +95,12 @@ const ProjectApplications = () => {
                 </div>
 
                     <div className="flex justify-end gap-2">
-                        {app.status === "pending" && (
+                        {project.status === "in-progress" ? (
+                            <span className='text-xs text-green-600 font-medium'>
+                                Freelancer Hired
+                            </span>
+                        ): (
+                            app.status === "pending" && (
                             <>
                                 <button
                                     onClick={() => updateStatus(app._id, "accepted")}
@@ -110,6 +115,7 @@ const ProjectApplications = () => {
                                     Reject
                                 </button>
                             </>
+                        )
                         )}
 
                         {app.status === "accepted" && (

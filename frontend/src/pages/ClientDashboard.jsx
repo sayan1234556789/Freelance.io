@@ -25,22 +25,22 @@ const ClientDashboard = () => {
     fetchMyProjects();
   }, []);
 
-  const handleDelete = async(id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this project?")
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this project?",
+    );
 
-    if(!confirmDelete) return
+    if (!confirmDelete) return;
 
     try {
-      const res = await api.delete(`/projects/${id}`)
-
-      setProjects(projects.filter((e) => e._id !== id))
-
-      toast.success("Deleted Successfully")
+      await api.delete(`/projects/${id}`);
+      setProjects(projects.filter((e) => e._id !== id));
+      toast.success("Deleted Successfully");
     } catch (error) {
-      console.log(error.response?.data || error)
-      toast.error("Error in deletion")
+      console.log(error.response?.data || error);
+      toast.error("Error in deletion");
     }
-  } 
+  };
 
   return (
     <div className="bg-[#F9F7F7] min-h-screen text-[#112D4E]">
@@ -83,7 +83,7 @@ const ClientDashboard = () => {
             </p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
             {projects.map((project) => (
               <div
                 key={project._id}
@@ -138,6 +138,36 @@ const ClientDashboard = () => {
                     </p>
                   </div>
                 </div>
+
+                {project.assignedFreelancer && (
+                  <div
+                    className="mt-5 flex items-center justify-between
+                    bg-green-50 border border-green-200
+                    rounded-xl px-4 py-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center font-semibold text-green-600">
+                        {project.assignedFreelancer.name?.charAt(0)}
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-wide text-green-600/70">
+                          Assigned Freelancer
+                        </p>
+                        <p className="text-sm font-semibold text-green-700">
+                          {project.assignedFreelancer.name}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="text-xs font-medium px-3 py-1 rounded-full
+                      bg-green-100 text-green-600"
+                    >
+                      ✓ Hired
+                    </span>
+                  </div>
+                )}
 
                 <div className="mt-6 pt-5 border-t border-[#DBE2EF]">
                   <div className="flex justify-between items-center mb-4">

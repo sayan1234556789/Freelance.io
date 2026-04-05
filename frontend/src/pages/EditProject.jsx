@@ -27,6 +27,7 @@ const EditProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      
       await api.put(`/projects/${id}`, form);
       toast.success("Project Updated");
       navigate("/clientdashboard");

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const FreelancerDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -27,7 +30,7 @@ const FreelancerDashboard = () => {
 
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="mb-10">
-          <h1 className="text-3xl font-extrabold tracking-tight">
+          <h1 className="text-3xl font-bold tracking-tight">
             My Applications
           </h1>
           <p className="text-sm text-[#112D4E]/50 mt-1">
@@ -124,6 +127,15 @@ const FreelancerDashboard = () => {
                     {app.proposal}
                   </p>
                 </div>
+
+                <button
+                  onClick={() => navigate(`/projects/${app.projectId._id}/applications`)}
+                  className="w-full mt-3 px-4 py-2 text-sm font-medium rounded-lg
+                  border border-[#3F72AF] text-[#3F72AF]
+                  hover:bg-[#3F72AF] hover:text-white transition"
+                 >
+                  View Tasks →
+                </button>
               </div>
             ))}
           </div>

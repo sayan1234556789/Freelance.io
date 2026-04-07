@@ -47,7 +47,9 @@ export const getMyApplications = async (req, res) => {
             freelancerId: req.user
         }).populate("projectId", "title budget deadline description")
 
-        res.json(myApplications)
+        const filtered = myApplications.filter((app) => app.projectId !== null)
+
+        res.json(filtered)
     } catch (error) {
         res.status(500).json({
             message: error.message

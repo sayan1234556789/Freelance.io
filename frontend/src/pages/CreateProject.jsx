@@ -10,7 +10,7 @@ const CreateProject = () => {
     description: "",
     budget: "",
     skills: "",
-    deadline: "",
+    deadline: ""
   });
   const navigate = useNavigate();
 

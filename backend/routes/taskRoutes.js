@@ -5,7 +5,7 @@ import { createTask, deleteTask, getProjectTasks, updateTask } from '../controll
 const router = express.Router()
 
 router.post("/", protect, createTask)
-router.get("/project/:projectId", protect, getProjectTasks)
+router.get("/:projectId", protect, getProjectTasks)
 router.put("/:id", protect, updateTask)
 router.delete("/:id", protect, deleteTask)
 

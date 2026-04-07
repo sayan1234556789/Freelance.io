@@ -12,6 +12,7 @@ const ProjectDetails = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [proposal, setProposal] = useState("");
+
   const navigate = useNavigate()
   const { user } = useAuth();
 
@@ -24,7 +25,7 @@ const ProjectDetails = () => {
         setProject(res.data);
       } catch (error) {
         console.log(error.response?.data || error);
-      } finally {
+      }finally {
         setLoading(false);
       }
     };
@@ -42,7 +43,8 @@ const ProjectDetails = () => {
       setProposal("")
     } catch (err) {
       console.log(err.response?.data?.message);
-      toast.error("Apply again")
+      const error = err.response?.data?.message
+      toast.error(error)
     }finally{
       navigate("/getallprojects")
     }
